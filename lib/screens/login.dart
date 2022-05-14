@@ -17,7 +17,7 @@ class Login extends StatelessWidget {
                 print(value);
               });
             },
-            child: const Text('Login with FB')),
+            child: const Text('Login with Facebook')),
         TextButton(
             onPressed: () async {
               _handleSignIn();
