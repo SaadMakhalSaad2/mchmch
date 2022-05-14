@@ -12,7 +12,11 @@ class MyFirebaseServices {
 
   Future<void> writeData(dynamic data, String key) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref(key);
-    await ref.set(data).then((value) => {print('data written')});
+    await ref.set(data).then((value) {
+      print('data written');
+    }).catchError((error) {
+      print('error writing $error');
+    });
   }
 
   Future<UserCredential> signInWithFacebook() async {
@@ -27,7 +31,7 @@ class MyFirebaseServices {
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
 
-  Future<User?> googleLogin() async {
+  Future<UserCredential> googleLogin() async {
     GoogleSignInAccount? googleSignInAccount = await GoogleSignIn(
       scopes: <String>[
         'email',
@@ -39,10 +43,6 @@ class MyFirebaseServices {
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
-    UserCredential authResult =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    User? _user = authResult.user;
-    return _user;
-    print('user $_user');
+    return FirebaseAuth.instance.signInWithCredential(credential);
   }
 }

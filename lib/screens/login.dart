@@ -22,7 +22,7 @@ class Login extends StatelessWidget {
           'assets/images/image.png',
           height: 150,
         ),
-        LoginTypes()
+        const LoginTypes()
       ],
     );
   }

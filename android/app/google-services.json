@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "936332248251",
+    "firebase_url": "https://mchmch-8f519-default-rtdb.firebaseio.com",
     "project_id": "mchmch-8f519",
     "storage_bucket": "mchmch-8f519.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "936332248251-b0hvj886jrafl0sl9m3tbobe3paurghi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mchmch",
+            "certificate_hash": "17d7119f02e2d2faa3390832e794178e04c6e4f7"
+          }
+        },
         {
           "client_id": "936332248251-b1sd9lfjkklj1h42l17nntmkq4807jpk.apps.googleusercontent.com",
           "client_type": 3
