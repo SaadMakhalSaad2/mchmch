@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mchmch/my_firebase_services.dart';
 
@@ -28,29 +29,22 @@ class Login extends StatelessWidget {
   }
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    // Optional clientId
-    // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
     scopes: <String>[
       'email',
     ],
   );
-  Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-  }
-  // void writeUser(UserCredential? credentials) {
-  //   User? user = credentials!.user;
-  //   UserProfile profile = UserProfile(
-  //       FirebaseAuth.instance.currentUser!.uid,
-  //       user!.email.toString(),
-  //       user.displayName.toString(),
-  //       credentials.additionalUserInfo!.profile!['picture']['data']['url'],
-  //       DateTime.now().millisecondsSinceEpoch.toString());
 
-  //   var profileJson = profile.toJson();
-  //   MyFirebaseServices().writeData(profileJson, 'users/${profile.id}');
-  // }
+  Future<void> _handleSignIn() async {
+    GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+    GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount!.authentication;
+    AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    UserCredential authResult =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    User? _user = authResult.user;
+    print('user $_user');
+  }
 }
