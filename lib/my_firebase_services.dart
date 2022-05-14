@@ -1,8 +1,7 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 
 class MyFirebaseServices {
   Future<void> logout() async {
@@ -28,14 +27,22 @@ class MyFirebaseServices {
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
 
-  // Future<UserProfile>? downloadProfile() async {
-  //   DatabaseReference ref = FirebaseDatabase.instance
-  //       .ref('users/${FirebaseAuth.instance.currentUser!.uid}');
-  //   DatabaseEvent event = await ref.once();
-  //   UserProfile p =
-  //       UserProfile.fromJson(event.snapshot.value as Map<Object?, Object?>);
-  //   return p;
-  // }
-
-  
+  Future<User?> googleLogin() async {
+    GoogleSignInAccount? googleSignInAccount = await GoogleSignIn(
+      scopes: <String>[
+        'email',
+      ],
+    ).signIn();
+    GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount!.authentication;
+    AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    UserCredential authResult =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    User? _user = authResult.user;
+    return _user;
+    print('user $_user');
+  }
 }
