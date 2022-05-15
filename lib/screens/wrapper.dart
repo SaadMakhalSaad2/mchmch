@@ -7,11 +7,14 @@ import 'package:provider/provider.dart';
 class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-// FirebaseServices().signOut();
     final user = Provider.of<User?>(context);
-    if (user != null) print('stream data: ${user.displayName}');
-
+    print('streaming user: $user');
     if (user != null) {
+      if (DateTime.now().difference(user.metadata.creationTime!).inSeconds <
+          2) {
+        print('new user');
+        return Login(newUser: true);
+      }
       return Home();
     } else {
       return Login();

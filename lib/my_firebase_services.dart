@@ -1,12 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mchmch/resources/colors.dart';
+import 'package:mchmch/resources/styles.dart';
 
 class MyFirebaseServices {
   Future<void> logout() async {
     print('Logout');
     await FacebookAuth.instance.logOut();
+    await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
   }
 
@@ -17,6 +21,18 @@ class MyFirebaseServices {
     }).catchError((error) {
       print('error writing $error');
     });
+  }
+
+  Future<bool> updateData(dynamic data, String key) async {
+    bool result = false;
+    DatabaseReference ref = FirebaseDatabase.instance.ref(key);
+    await ref.update(data).then((value) {
+      print('data updated');
+      result = true;
+    }).catchError((error) {
+      print('error updating $error');
+    });
+    return result;
   }
 
   Future<UserCredential> signInWithFacebook() async {
@@ -37,12 +53,22 @@ class MyFirebaseServices {
         'email',
       ],
     ).signIn();
-    GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount!.authentication;
+    GoogleSignInAuthentication gsa = await googleSignInAccount!.authentication;
     AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
+      accessToken: gsa.accessToken,
+      idToken: gsa.idToken,
     );
     return FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  snack(context, message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: MyColors().primaryColor,
+      content: Text(
+        message,
+        textAlign: TextAlign.right,
+        style: MyStyles().smallNormal,
+      ),
+    ));
   }
 }

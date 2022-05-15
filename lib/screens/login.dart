@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mchmch/widgets/login_types.dart';
+import 'package:mchmch/widgets/user_types.dart';
 import '../resources/colors.dart';
 
 class Login extends StatelessWidget {
-  Login({Key? key}) : super(key: key);
+  final bool newUser;
+  const Login({Key? key, this.newUser = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class Login extends StatelessWidget {
           'assets/images/image.png',
           height: 150,
         ),
-        const LoginTypes()
+        newUser ? UserTypes() : LoginTypes()
       ],
     );
   }

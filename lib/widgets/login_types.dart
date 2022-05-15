@@ -57,11 +57,15 @@ class LoginTypes extends StatelessWidget {
   void _redirectUser(UserCredential credential) async {
     var user = credential.user;
     if (credential.additionalUserInfo!.isNewUser) {
-      var p = UserProfile(
-          user!.uid,
-          user.email,
-          user.displayName,
-          credential.additionalUserInfo!.profile!['picture'],
+      String imageUrl = '';
+      if (credential.credential!.providerId == 'facebook.com') {
+        imageUrl =
+            credential.additionalUserInfo!.profile!['picture']['data']['url'];
+      } else if (credential.credential!.providerId == 'google.com') {
+        credential.additionalUserInfo!.profile!['picture'];
+      }
+
+      var p = UserProfile(user!.uid, user.email, user.displayName, imageUrl,
           DateTime.now().millisecondsSinceEpoch.toString());
       MyFirebaseServices().writeData(p.toJson(), 'users/' + user.uid);
     }
